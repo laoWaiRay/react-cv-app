@@ -18,6 +18,7 @@ export default class Education extends Component {
         location: '',
         description: '',
       },
+      showRemove: false,
     }
   }
 
@@ -45,8 +46,23 @@ export default class Education extends Component {
         location: '',
         description: '',
       },
+      showRemove: false,
     });
     console.log(this.state.savedForms);
+  }
+
+  delete = (id) => {
+    let newSavedForms = [...this.state.savedForms];
+    newSavedForms = newSavedForms.filter((form) => form.id !== id)
+    this.setState({
+      savedForms: newSavedForms,
+    })
+  }
+
+  toggleRemove = () => {
+    this.setState({
+      showRemove: !this.state.showRemove,
+    })
   }
 
   render() {
@@ -62,6 +78,15 @@ export default class Education extends Component {
             /> : 
             ''
           }
+          {!this.state.isFormOpen ? 
+            <Button
+              className={this.state.showRemove ? 'show-delete-btn active' : 'show-delete-btn'}
+              text='Remove'
+              onClick={this.toggleRemove}
+            /> : 
+            ''
+          }
+          
         </div>
 
         {this.state.isFormOpen ? 
@@ -73,11 +98,14 @@ export default class Education extends Component {
           /> : 
           ''
         }
+        
         {this.state.savedForms.length > 0 ? 
           this.state.savedForms.map((form, index) => { 
             return <EducationDisplay 
                 key={index} 
                 formData={form}
+                onClick={this.delete}
+                showRemove={this.state.showRemove}
               /> 
           }) : 
           ''

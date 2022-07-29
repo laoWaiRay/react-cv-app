@@ -8,8 +8,11 @@ export default class Input extends Component {
       value={this.props.text}
       onChange={(e) => {this.props.handleChange(e, this.props.prop)}}
       onKeyDown={(e)=>{
-        if (e.key === 'Enter') {
+        if (this.props.isOpen !== 'true' && e.key === 'Enter') {
           this.props.toggleEditable()
+        }
+        if (e.key === 'Enter' && this.props.onEnterPress) {
+          this.props.onEnterPress()
         }
       }}
       onBlur={this.props.toggleEditable}

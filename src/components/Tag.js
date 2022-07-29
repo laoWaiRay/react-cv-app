@@ -16,6 +16,10 @@ export default class Tag extends Component {
     })
   }
 
+  componentDidMount() {
+    if (this.props.isOpen === 'true') this.toggleEditable();
+  }
+
   render() {
     return (
       <div className='tag'>
@@ -28,9 +32,11 @@ export default class Tag extends Component {
         <Input 
           text={this.props.text} 
           handleChange={this.props.handleChange} 
-          toggleEditable={this.toggleEditable}
+          toggleEditable={this.props.isOpen === 'true' ? undefined : this.toggleEditable}
           placeholder={this.props.placeholder}
-          prop={this.props.prop} 
+          prop={this.props.prop}
+          onEnterPress={this.props.onEnterPress} 
+          isOpen={this.props.isOpen}
         />}
       </div>
     )

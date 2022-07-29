@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
+import Button from './Button'
 
 export default class EducationDisplay extends Component {
   render() {
+    const id = this.props.formData.id;
+
     return (
       <div className='education-display'>
         <div className='row-1'>
@@ -15,6 +18,14 @@ export default class EducationDisplay extends Component {
         <div className='description'>
           {this.props.formData.description}
         </div>
+        {this.props.showRemove === true ? 
+          <Button
+            text='Remove'
+            className='section-close'
+            onClick={() => this.props.onClick(id)}
+          /> :
+          ''
+        }
       </div>
     )
   }

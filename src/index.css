@@ -169,7 +169,7 @@ button:hover {
 .section-header {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .section-header h2 {
@@ -209,4 +209,87 @@ button:hover {
 
 .tag {
   cursor: pointer;
+}
+
+.skills-display {
+  display: flex;
+}
+
+.badge {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  font-size: 2rem;
+  border-radius: 5rem;
+  padding: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.badge:nth-of-type(n) {
+  background-color: #f29e4c;
+}
+
+.badge:nth-of-type(2n) {
+  background-color: #efea5a;
+}
+
+.badge:nth-of-type(3n) {
+  background-color: #83e377;
+}
+
+.badge:nth-of-type(4n) {
+  background-color: #048ba8;
+  color: #fff;
+}
+
+.badge:nth-of-type(5n) {
+  background-color: #54478c;
+  color: #fff;
+}
+
+.badge:not(:first-child) {
+  margin: 0 1rem;
+}
+
+.skills-form .tag {
+  padding: 1rem 0;
+}
+
+.show-delete-btn.active {
+  background-color: blueviolet;
+  color: #fff;
+}
+
+.section-close {
+  margin: 1rem 0 1.5rem 0;
+}
+
+.badge-delete {
+  background-color: transparent;
+  font-size: 1.5rem;
+}
+
+.badge:nth-of-type(4n) .badge-delete,
+.badge:nth-of-type(5n) .badge-delete {
+  color: #fff;
+}
+
+.orange {
+  background-color: #f29e4c;
+}
+
+.yellow {
+  background-color: #efea5a;
+}
+
+.green {
+  background-color: #83e377;
+}
+
+.blue {
+  background-color: #048ba8;
+}
+
+.purple {
+  background-color: #54478c;
 }
