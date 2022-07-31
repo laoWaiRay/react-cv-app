@@ -1,44 +1,43 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import Display from './Display';
 import Input from './Input';
 
-export default class Tag extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isEdit: false,
-    }
+const Tag = (props) => {
+  const [isEdit, setIsEdit] = useState(false);
+
+  const toggleEditable = (e) => {
+    setIsEdit((prevState) => !prevState);
   }
 
-  toggleEditable = (e) => {
-    this.setState({
-      isEdit: !this.state.isEdit,
-    })
-  }
+  // componentDidMount() {
+  //   if (props.isOpen === 'true') toggleEditable();
+  // }
 
-  componentDidMount() {
-    if (this.props.isOpen === 'true') this.toggleEditable();
-  }
+  useEffect(() => {
+    console.log('use effect')
+    if (props.isOpen === 'true') toggleEditable();
+    //eslint-disable-next-line
+  }, [])
 
-  render() {
-    return (
-      <div className='tag'>
-        {!(this.state.isEdit) ? 
-        <Display 
-          text={this.props.text} 
-          placeholder={this.props.placeholder}
-          toggleEditable={this.toggleEditable}
-        /> : 
-        <Input 
-          text={this.props.text} 
-          handleChange={this.props.handleChange} 
-          toggleEditable={this.props.isOpen === 'true' ? undefined : this.toggleEditable}
-          placeholder={this.props.placeholder}
-          prop={this.props.prop}
-          onEnterPress={this.props.onEnterPress} 
-          isOpen={this.props.isOpen}
-        />}
-      </div>
-    )
-  }
+  return (
+    <div className='tag'>
+      {!(isEdit) ? 
+      <Display 
+        text={props.text} 
+        placeholder={props.placeholder}
+        toggleEditable={toggleEditable}
+      /> : 
+      <Input 
+        text={props.text} 
+        handleChange={props.handleChange} 
+        toggleEditable={props.isOpen === 'true' ? undefined : toggleEditable}
+        placeholder={props.placeholder}
+        prop={props.prop}
+        onEnterPress={props.onEnterPress} 
+        isOpen={props.isOpen}
+      />}
+    </div>
+  )
 }
+
+export default Tag

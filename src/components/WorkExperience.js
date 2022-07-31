@@ -1,15 +1,45 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import Button from './Button';
 import WorkExperienceForm from './WorkExperienceForm';
 import WorkExperienceDisplay from './WorkExperienceDisplay';
 import { v4 as uuidv4 } from 'uuid'
 
-export default class WorkExperience extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFormOpen: false,
-      savedForms: [],
+const WorkExperience = (props) => {
+  const [state, setState] = useState({
+    isFormOpen: false,
+    savedForms: [],
+    formData: {
+      id: '',
+      company: '',
+      date: '',
+      jobTitle: '',
+      location: '',
+      description: '',
+    },
+    showRemove: false,
+  });
+
+  const clickHandler = () => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        isFormOpen: !prevState.isFormOpen,
+      }
+    })
+  }
+
+  const handleChange = (e, prop) => {
+    const newFormData = {...state.formData, [prop]: e.target.value, id: uuidv4()}
+    setState({
+      ...state,
+      formData: newFormData
+    })
+  }
+
+  const save = () => {
+    setState({
+      isFormOpen: true,
+      savedForms: state.savedForms.concat([state.formData]),
       formData: {
         id: '',
         company: '',
@@ -19,99 +49,72 @@ export default class WorkExperience extends Component {
         description: '',
       },
       showRemove: false,
-    }
-  }
-
-  clickHandler = () => {
-    this.setState({
-      isFormOpen: !this.state.isFormOpen,
-    })
-  }
-
-  handleChange = (e, prop) => {
-    const newFormData = {...this.state.formData, [prop]: e.target.value, id: uuidv4()}
-    this.setState({
-      formData: newFormData
-    })
-  }
-
-  save = async () => {
-    await this.setState({
-      savedForms: this.state.savedForms.concat([this.state.formData]),
-      formData: {
-        id: '',
-        company: '',
-        date: '',
-        jobTitle: '',
-        location: '',
-        description: '',
-      },
     });
-    console.log(this.state.savedForms);
   }
 
-  delete = (id) => {
-    let newSavedForms = [...this.state.savedForms];
-    newSavedForms = newSavedForms.filter((form) => form.id !== id)
-    this.setState({
+  const deleteForm = (id) => {
+    let newSavedForms = [...state.savedForms];
+    newSavedForms = newSavedForms.filter((form) => form.id !== id);
+    setState((prevState) => { return {
+      ...prevState,
       savedForms: newSavedForms,
+    }})
+  }
+
+  const toggleRemove = () => {
+    setState({
+      ...state,
+      showRemove: !state.showRemove,
     })
   }
 
-  toggleRemove = () => {
-    this.setState({
-      showRemove: !this.state.showRemove,
-    })
-  }
-
-  render() {
-    return (
-      <div className='section'>
-        <div className='section-header'>
-          <h2>Work Experience</h2>
-          {!this.state.isFormOpen ? 
-            <Button 
-              text='Add' 
-              onClick={this.clickHandler}
-              className='add-btn'
-            /> : 
-            ''
-          }
-
-          {!this.state.isFormOpen ? 
-          <Button
-            className={this.state.showRemove ? 'show-delete-btn active' : 'show-delete-btn'}
-            text='Remove'
-            onClick={this.toggleRemove}
-          /> : 
-          ''
-        }
-        </div>
-
-        {this.state.isFormOpen ? 
-          <WorkExperienceForm 
-            formData={this.state.formData} 
-            handleChange={this.handleChange} 
-            save={this.save} 
-            clickHandler={this.clickHandler}
+  return (
+    <div className='section'>
+      <div className='section-header'>
+        <h2>Work Experience</h2>
+        {!state.isFormOpen ? 
+          <Button 
+            text='Add' 
+            onClick={clickHandler}
+            className='add-btn'
           /> : 
           ''
         }
 
-        {this.state.savedForms.length > 0 ? 
-          this.state.savedForms.map((form, index) => { 
-            return <WorkExperienceDisplay 
-                key={index} 
-                formData={form}
-                onClick={this.delete}
-                showRemove={this.state.showRemove}
-              /> 
-          }) : 
-          ''
-        }
+        {!state.isFormOpen ? 
+        <Button
+          className={state.showRemove ? 'show-delete-btn active' : 'show-delete-btn'}
+          text='Remove'
+          onClick={toggleRemove}
+        /> : 
+        ''
+      }
       </div>
-    )
-  }
+
+      {state.isFormOpen ? 
+        <WorkExperienceForm 
+          formData={state.formData} 
+          handleChange={handleChange} 
+          save={save} 
+          clickHandler={clickHandler}
+        /> : 
+        ''
+      }
+
+      {state.savedForms.length > 0 ? 
+        state.savedForms.map((form, index) => { 
+          return <WorkExperienceDisplay 
+              key={index} 
+              formData={form}
+              onClick={deleteForm}
+              showRemove={state.showRemove}
+            /> 
+        }) : 
+        ''
+      }
+    </div>
+  )
 }
 
+export default WorkExperience
 

@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Display extends Component {
-  render() {
-    return (
-      <div className='contact-info-display' onClick={this.props.toggleEditable}>
-        {this.props.text ? this.props.text : this.props.placeholder}
-      </div>
-    )
-  }
+const Display = (props) => {
+  return (
+    <div className='contact-info-display' onClick={props.toggleEditable}>
+      {props.text ? props.text : props.placeholder}
+    </div>
+  )
 }
+
+export default Display

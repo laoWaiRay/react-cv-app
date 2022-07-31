@@ -1,38 +1,49 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import Button from './Button';
 import SkillsForm from './SkillsForm';
 import SkillsDisplay from './SkillsDisplay';
 import { v4 as uuidv4 } from 'uuid'
 
-export default class Skills extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFormOpen: false,
-      savedSkills: [],
-      skill: {
-        text: '',
-        id: '',
-      }
-    }
+const Skills = (props) => {
+  // constructor(props) {
+  //   super(props);
+  //   state = {
+  //     isFormOpen: false,
+  //     savedSkills: [],
+  //     skill: {
+  //       text: '',
+  //       id: '',
+  //     }
+  //   }
+  // }
+  const [state, setState] = useState({
+    isFormOpen: false,
+    savedSkills: [],
+    skill: {
+      text: '',
+      id: '',
+    },
+  })
+
+  const clickHandler = () => {
+    setState((prevState) => {return {
+      ...prevState,
+      isFormOpen: !state.isFormOpen,
+    }})
   }
 
-  clickHandler = () => {
-    this.setState({
-      isFormOpen: !this.state.isFormOpen,
-    })
-  }
-
-  handleChange = (e, prop) => {
-    const newSkill = {...this.state.skill, [prop]: e.target.value, id: uuidv4()}
-    this.setState({
+  const handleChange = (e, prop) => {
+    const newSkill = {[prop]: e.target.value, id: uuidv4()}
+    setState({
+      ...state,
       skill: newSkill,
     })
   }
 
-  save = async () => {
-    await this.setState({
-      savedSkills: this.state.savedSkills.concat([this.state.skill]),
+  const save = () => {
+    setState({
+      isFormOpen: true,
+      savedSkills: state.savedSkills.concat([state.skill]),
       skill: {
         text: '',
         id: ''
@@ -40,47 +51,48 @@ export default class Skills extends Component {
     });
   }
 
-  deleteSkill = (id) => {
-    let newSavedSkills = [...this.state.savedSkills];
+  const deleteSkill = (id) => {
+    let newSavedSkills = [...state.savedSkills];
     newSavedSkills = newSavedSkills.filter((skill) => skill.id !== id)
-    this.setState({
+    setState({
+      ...state,
       savedSkills: newSavedSkills,
     })
   }
   
-  render() {
-    return (
-      <div className='section'>
-        <div className='section-header'>
-          <h2>Skills</h2>
-          {!this.state.isFormOpen ? 
-            <Button 
-              text='Add' 
-              onClick={this.clickHandler}
-              className='add-btn'
-            /> : 
-            ''
-          }
-        </div>
-
-        {this.state.isFormOpen ? 
-          <SkillsForm 
-            skill={this.state.skill} 
-            handleChange={this.handleChange} 
-            save={this.save} 
-            clickHandler={this.clickHandler}
-          /> : 
-          ''
-        }
-
-        {this.state.savedSkills.length > 0 ? 
-          <SkillsDisplay
-            skills={this.state.savedSkills}
-            onClick={this.deleteSkill}
+  return (
+    <div className='section'>
+      <div className='section-header'>
+        <h2>Skills</h2>
+        {!state.isFormOpen ? 
+          <Button 
+            text='Add' 
+            onClick={clickHandler}
+            className='add-btn'
           /> : 
           ''
         }
       </div>
-    )
-  }
+
+      {state.isFormOpen ? 
+        <SkillsForm 
+          skill={state.skill} 
+          handleChange={handleChange} 
+          save={save} 
+          clickHandler={clickHandler}
+        /> : 
+        ''
+      }
+
+      {state.savedSkills.length > 0 ? 
+        <SkillsDisplay
+          skills={state.savedSkills}
+          onClick={deleteSkill}
+        /> : 
+        ''
+      }
+    </div>
+  )
 }
+
+export default Skills
